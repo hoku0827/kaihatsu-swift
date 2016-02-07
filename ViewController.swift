@@ -22,6 +22,23 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // 横幅、高さ、ステータスバーの高さを取得する
+        let width: CGFloat! = self.view.bounds.width
+        let height: CGFloat! = self.view.bounds.height
+        let statusBarHeight: CGFloat! = UIApplication.sharedApplication().statusBarFrame.height
+        
+        self.tableView = UITableView(frame: CGRectMake(0, statusBarHeight, width, height - statusBarHeight))
+        
+        // デリゲートを指定する
+        self.tableView!.delegate = self
+        self.tableView!.dataSource = self
+        
+        // UITableViewにセルとして使うクラスを登録する
+        self.tableView!.registerClass(UITableViewCell.self, forCellReuseIdentifier: cellId)
+        
+        // Viewに追加する。
+        self.view.addSubview(self.tableView!)
     }
     
     override func viewWillAppear(animated: Bool) {
@@ -29,8 +46,9 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     }
     
     // セルの総数を返す(表示するテーブルの行数)
-    func tableView(table: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return imgArray.count
+    // UITableViewDataSource を使う場合は 必須
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return self.users.size
     }
     
     // 表示するセルを生成して返す
