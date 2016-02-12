@@ -1,12 +1,10 @@
 //
 //  AppDelegate.swift
-//  APIDemo
-//
-//  Created by Kazuya Tateishi on 2015/03/25.
-//  Copyright (c) 2015年 kzy52. All rights reserved.
 //
 
 import UIKit
+import Fabric
+import TwitterKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -15,7 +13,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
-        // Override point for customization after application launch.
+        Fabric.with([Twitter.self])
         return true
     }
     
@@ -40,7 +38,33 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillTerminate(application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     }
-    
-    
+
+    // Universal Link対応
+    func application(application: UIApplication, continueUserActivity userActivity: NSUserActivity, restorationHandler: ([AnyObject]?) -> Void) -> Bool {
+        // typeをチェック
+        if userActivity.activityType == NSUserActivityTypeBrowsingWeb {
+            let webpageURL = userActivity.webpageURL!
+            if !handleUniversalLink(URL: webpageURL) {
+                // コンテンツをアプリで開けない場合は、Safariに戻す
+                UIApplication.sharedApplication().openURL(webpageURL)
+                return false
+            }
+            // 多分処理後にここかどこか適切な場所で呼ぶ必要あり
+            restorationHandler([])
+        }
+        return true
+    }
+    private func handleUniversalLink(URL url: NSURL) -> Bool {
+        if let components = NSURLComponents(URL: url, resolvingAgainstBaseURL: true), let host = components.host {
+            switch host {
+            case "ec2-52-68-185-145.ap-northeast-1.compute.amazonaws.com":
+                return true
+            default:
+                return false
+            }
+            
+        }
+        return false
+    }
 }
 

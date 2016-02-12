@@ -10,12 +10,13 @@ import Foundation
 import Alamofire
 
 enum Router: URLRequestConvertible {
-    static let baseURLString = "http://localhost:3000"
+    static let baseURLString = "http://ec2-52-68-185-145.ap-northeast-1.compute.amazonaws.com"
+    
     case GetUsers()
     
     var URLRequest: NSMutableURLRequest {
         
-        let (_, path, parameters): (Alamofire.Method, String, [String: AnyObject]?) = {
+        let (method, path, parameters): (Alamofire.Method, String, [String: AnyObject]?) = {
             switch self {
             case .GetUsers: return (.GET, "/api/v1/users", nil)
             }

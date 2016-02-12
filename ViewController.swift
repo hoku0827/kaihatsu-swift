@@ -1,9 +1,5 @@
 //
 //  ViewController.swift
-//  APIDemo
-//
-//  Created by Kazuya Tateishi on 2015/03/25.
-//  Copyright (c) 2015年 kzy52. All rights reserved.
 //
 
 import UIKit
@@ -12,7 +8,8 @@ import Alamofire
 // UITableViewを使用する際はUITableViewDataSourceプロトコルとUITableViewDelegateプロトコルを実装する必要がある
 class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     @IBOutlet var table:UITableView!
-    let imgArray: NSArray = ["img1.jpg", "img2.jpg", "img3.jpg", "img4.jpg", "img5.jpg"]
+    
+    let imgArray: NSArray = ["img1.jpg", "img2.jpg", "img3.jpg", "img4.jpg", "img5.jpg", "img6.jpg", "img7.jpg", "img8.jpg"]
     let cellId = "tableCell"
     
     // 今回はテーブル表示にしたいので UITableView を使う
@@ -23,43 +20,40 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // 横幅、高さ、ステータスバーの高さを取得する
-        let width: CGFloat! = self.view.bounds.width
-        let height: CGFloat! = self.view.bounds.height
-        let statusBarHeight: CGFloat! = UIApplication.sharedApplication().statusBarFrame.height
+        let backButtonItem = UIBarButtonItem(title: "", style: .Plain, target: nil, action: nil)
+        navigationItem.backBarButtonItem = backButtonItem
         
-        self.tableView = UITableView(frame: CGRectMake(0, statusBarHeight, width, height - statusBarHeight))
-        
-        // デリゲートを指定する
-        self.tableView!.delegate = self
-        self.tableView!.dataSource = self
-        
-        // UITableViewにセルとして使うクラスを登録する
-        self.tableView!.registerClass(UITableViewCell.self, forCellReuseIdentifier: cellId)
-        
-        // Viewに追加する。
-        self.view.addSubview(self.tableView!)
-    }
-    
-    override func viewWillAppear(animated: Bool) {
+        // request for CMS
         self.request()
     }
     
+    override func viewWillAppear(animated: Bool) {
+    }
+    
     // セルの総数を返す(表示するテーブルの行数)
-    // UITableViewDataSource を使う場合は 必須
-    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(table: UITableView, numberOfRowsInSection section: Int) -> Int {
         return self.users.size
     }
     
     // 表示するセルを生成して返す
     // UITableViewDataSource を使う場合は 必須
-    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        // UITableViewCellはテーブルの一つ一つのセルを管理するクラス。
-        let cell: UITableViewCell = tableView.dequeueReusableCellWithIdentifier(cellId, forIndexPath: indexPath) as UITableViewCell
+    func tableView(table: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        // UITableViewCellはテーブルの一つ一つのセルを管理するクラス。    
+        let cell = table.dequeueReusableCellWithIdentifier(cellId, forIndexPath: indexPath)
+
+        let img = UIImage(named:"\(imgArray[indexPath.row])")
         
-        // Cellに値を設定する.
+        let imageView = table.viewWithTag(1) as! UIImageView
+        imageView.image = img
+
+        let leadLabel = table.viewWithTag(2) as! UILabel
+        leadLabel.text = "AAAAAAAAAAAAAAAABBBBBBBBBBBBBBBBCCCCCCCCCCCCCCCC"
+        leadLabel.numberOfLines = 0
+        leadLabel.sizeToFit()
+
+        let accountLabel = table.viewWithTag(3) as! UILabel
         let user: User = self.users[indexPath.row] as User
-        cell.textLabel?.text = user.email
+        accountLabel.text = user.email
         
         return cell
     }
@@ -76,7 +70,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                 }
                 
                 dispatch_async(dispatch_get_main_queue(), {
-                    self.tableView!.reloadData()
+                    self.table!.reloadData()
                 })
             }
         }
@@ -84,6 +78,5 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
 }
