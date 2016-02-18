@@ -1,6 +1,5 @@
 //
 //  User.swift
-//  APIDemo
 //
 //  Created by Kazuya Tateishi on 2015/03/25.
 //  Copyright (c) 2015年 kzy52. All rights reserved.
