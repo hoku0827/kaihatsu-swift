@@ -1,0 +1,23 @@
+{
+  "images" : [
+    {
+      "idiom" : "universal",
+      "filename" : "en-formed.jpg",
+      "scale" : "1x"
+    },
+    {
+      "idiom" : "universal",
+      "filename" : "en-forme-d&-39;etoile-noir-dans-un-symbole-d&-39;interface-preferee-cercle-de-contour_318-56635.jpg",
+      "scale" : "2x"
+    },
+    {
+      "idiom" : "universal",
+      "filename" : "en-forme-d&-39;etoile-noir-dans-un-symbole-d&-39;interface-preferee-cercle-de-contour_318-56636.jpg",
+      "scale" : "3x"
+    }
+  ],
+  "info" : {
+    "version" : 1,
+    "author" : "xcode"
+  }
+}

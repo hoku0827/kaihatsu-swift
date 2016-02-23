@@ -5,15 +5,36 @@
 import UIKit
 import Fabric
 import TwitterKit
+import SlideMenuControllerSwift
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var window: UIWindow?
     
+    private func createMenuView() {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let viewController = storyboard.instantiateViewControllerWithIdentifier("ViewController") as! ViewController
+        let menuViewController = storyboard.instantiateViewControllerWithIdentifier("MenuViewController") as! MenuViewController
+        let nvc: UINavigationController = UINavigationController(rootViewController: viewController)
+        menuViewController.viewController = nvc
+        let slideMenuController = SlideMenuController(mainViewController:nvc, leftMenuViewController: menuViewController)
+        self.window?.backgroundColor = UIColor(red: 236.0, green: 238.0, blue: 241.0, alpha: 1.0)
+        self.window?.rootViewController = slideMenuController
+        self.window?.makeKeyAndVisible()
+    }
+  
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+        
+        /* use fabric */
         Fabric.with([Twitter.self])
-        UINavigationBar.appearance().tintColor = UIColor.greenColor()
+        
+        /* use slide menu */
+        createMenuView()
+        
+        /* change color */
+        UINavigationBar.appearance().tintColor = UIColor.darkTextColor()
+        
         return true
     }
     

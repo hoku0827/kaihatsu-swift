@@ -8,12 +8,27 @@ import Alamofire
 // UITableViewを使用する際はUITableViewDataSourceプロトコルとUITableViewDelegateプロトコルを実装する必要がある
 class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     @IBOutlet var table:UITableView!
+    @IBOutlet weak var menuBtn: UIButton!
+    @IBOutlet weak var cfgBtn: UIButton!
+    
     let cellId = "tableCell"
     
     // 今回はテーブル表示にしたいので UITableView を使う
     var tableView : UITableView?
     var selectedUrl: NSURL?
     var articles = ArticleDataManager.sharedInstance
+
+    // メニュー表示
+    func tappedLeftBarButton() {
+        self.slideMenuController()?.openLeft()
+    }
+    
+    // 検索画面を表示
+    func searchButtonTapped() {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let sVC = storyboard.instantiateViewControllerWithIdentifier("SearchViewController")
+        navigationController?.pushViewController(sVC, animated: true)
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,6 +36,17 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
         // Back Button string
         let backButtonItem = UIBarButtonItem(title: "", style: .Plain, target: nil, action: nil)
         navigationItem.backBarButtonItem = backButtonItem
+
+        // create menu button
+        menuBtn.setImage(UIImage(named: "ic_menu_black_24dp"), forState: UIControlState.Normal)
+        menuBtn.addTarget(self, action: "tappedLeftBarButton", forControlEvents: UIControlEvents.TouchUpInside)
+        let menuBarButton = UIBarButtonItem(customView: menuBtn)
+        self.navigationItem.leftBarButtonItem = menuBarButton
+
+        // create search button
+        let rightSearchBarButtonItem:UIBarButtonItem = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.Search, target: self, action: "searchButtonTapped")
+        // add the button to navigationBar
+        self.navigationItem.setRightBarButtonItems([rightSearchBarButtonItem], animated: true)
         
         // Alamofire on ssl
         let manager = Alamofire.Manager.sharedInstance
@@ -59,7 +85,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     // 表示するセルを生成して返す
     // UITableViewDataSource を使う場合は 必須
     func tableView(table: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        // UITableViewCellはテーブルの一つ一つのセルを管理するクラス。    
+        // UITableViewCellはテーブルの一つ一つのセルを管理するクラス。
         let cell = table.dequeueReusableCellWithIdentifier(cellId, forIndexPath: indexPath)
         let article: Article = self.articles[indexPath.row] as Article
 
